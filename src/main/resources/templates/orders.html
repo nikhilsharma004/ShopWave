@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Your Orders - ShopWave</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="narrow">
+    <h1>Your orders</h1>
+
+    <section class="empty-state" th:if="${#lists.isEmpty(orders)}">
+        <h2>No orders yet</h2>
+        <a th:href="@{/}">Start shopping</a>
+    </section>
+
+    <section class="orders-list" th:unless="${#lists.isEmpty(orders)}">
+        <article class="order-card" th:each="order : ${orders}">
+            <div>
+                <h2 th:text="${'Order #' + order.id}">Order</h2>
+                <p th:text="${'Placed by ' + order.customerName + ' at ' + order.placedAt}">Placed</p>
+            </div>
+            <strong th:text="${#numbers.formatCurrency(order.total)}">$0.00</strong>
+            <a class="secondary-action" th:href="@{/orders/{id}(id=${order.id})}">View details</a>
+        </article>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Today's Deals - ShopWave</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: siteHeader}"></div>
+
+<main class="page">
+    <section class="deals-hero">
+        <h1>Today's Deals</h1>
+        <p>Limited-time offers across electronics, fashion, home, footwear and bags.</p>
+    </section>
+
+    <section class="product-grid" aria-label="Deals">
+        <article class="product-card" th:each="product : ${products}">
+            <a class="product-image" th:href="@{/products/{id}(id=${product.id})}">
+                <img th:src="${product.imageUrl}" th:alt="${product.name}">
+            </a>
+            <div class="product-content">
+                <span class="deal-badge">Deal</span>
+                <a th:href="@{/products/{id}(id=${product.id})}">
+                    <h2 th:text="${product.name}">Product name</h2>
+                </a>
+                <div class="rating"><span>★★★★☆</span><small th:text="${'(' + (product.stock * 7) + ')'}">(120)</small></div>
+                <strong class="price" th:text="${#numbers.formatCurrency(product.price)}">$0.00</strong>
+                <small class="delivery">FREE delivery by tomorrow</small>
+                <form th:action="@{/cart/add/{id}(id=${product.id})}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                    <button type="submit">Add to Cart</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<header th:fragment="siteHeader" class="site-header" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <div class="top-bar">
+        <a class="brand" th:href="@{/}">
+            <span>shop</span>wave
+        </a>
+
+        <a class="deliver-to" th:href="@{/delivery}">
+            <small>Deliver to</small>
+            <strong>India</strong>
+        </a>
+
+        <form class="header-search" th:action="@{/}" method="get">
+            <select name="query" aria-label="Search category">
+                <option value="">All</option>
+                <option value="Electronics">Electronics</option>
+                <option value="Fashion">Fashion</option>
+                <option value="Home">Home</option>
+                <option value="Footwear">Footwear</option>
+                <option value="Bags">Bags</option>
+            </select>
+            <input type="search" name="keyword" placeholder="Search ShopWave" th:value="${keyword}">
+            <button type="submit" aria-label="Search">Search</button>
+        </form>
+
+        <nav class="nav">
+            <a sec:authorize="!isAuthenticated()" th:href="@{/login}">
+                <small>Hello, sign in</small>
+                <strong>Login</strong>
+            </a>
+            <a sec:authorize="!isAuthenticated()" th:href="@{/register}">
+                <small>New customer?</small>
+                <strong>Register</strong>
+            </a>
+            <form class="logout-form" sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit">
+                    <small sec:authentication="name">Hello</small>
+                    <strong>Logout</strong>
+                </button>
+            </form>
+            <a th:href="@{/orders}">
+                <small>Returns</small>
+                <strong>& Orders</strong>
+            </a>
+            <a class="cart-link" th:href="@{/cart}">
+                <span th:text="${cart.itemCount}">0</span>
+                <strong>Cart</strong>
+            </a>
+        </nav>
+    </div>
+
+    <nav class="category-bar">
+        <a th:href="@{/}">All</a>
+        <a th:href="@{/(query='Electronics')}">Electronics</a>
+        <a th:href="@{/(query='Fashion')}">Fashion</a>
+        <a th:href="@{/(query='Home')}">Home & Kitchen</a>
+        <a th:href="@{/(query='Footwear')}">Footwear</a>
+        <a th:href="@{/(query='Bags')}">Bags</a>
+        <a th:href="@{/deals}">Today's Deals</a>
+    </nav>
+</header>

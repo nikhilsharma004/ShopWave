@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Checkout</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<div class="page">
+    <div th:replace="~{fragments/header :: siteHeader}"></div>
+
+    <main class="checkout-layout">
+        <section>
+            <h1>Checkout</h1>
+            <form class="checkout-form" th:action="@{/checkout}" th:object="${checkoutForm}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <label>
+                    Full name
+                    <input th:field="*{customerName}" type="text" autocomplete="name">
+                    <small th:if="${#fields.hasErrors('customerName')}" th:errors="*{customerName}"></small>
+                </label>
+                <label>
+                    Email
+                    <input th:field="*{email}" type="email" autocomplete="email">
+                    <small th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+                </label>
+                <label>
+                    Delivery address
+                    <textarea th:field="*{address}" rows="5" autocomplete="street-address"></textarea>
+                    <small th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></small>
+                </label>
+                <button type="submit">Place order</button>
+            </form>
+        </section>
+
+        <aside class="summary">
+            <h2>Payable total</h2>
+            <div class="summary-row" th:each="item : ${cart.items}">
+                <span th:text="${item.product.name + ' x ' + item.quantity}">Item</span>
+                <span th:text="${#numbers.formatCurrency(item.subtotal)}">Total</span>
+            </div>
+            <div class="summary-row total">
+                <span>Total</span>
+                <strong th:text="${#numbers.formatCurrency(cart.total)}">$0.00</strong>
+            </div>
+        </aside>
+    </main>
+</div>
+</body>
+</html>
